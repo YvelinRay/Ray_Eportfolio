@@ -91,28 +91,6 @@ $totalMedias = count($media);
 
                             <!-- content -->
                             <div class="row">
-
-                                <!-- main col left -->
-                                <div class="col-sm-5">
-
-                                    <div class="panel panel-default">
-                                        <div class="panel-thumbnail"><img src="assets/img/bg_5.jpg" class="img-responsive"></div>
-                                        <div class="panel-body">
-                                            <p class="lead">Urbanization</p>
-                                            <p>45 Followers, 13 Posts</p>
-
-                                            <p>
-                                                <img src="assets/img/uFp_tsTJboUY7kue5XAsGAs28.png" height="28px" width="28px">
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- main col right -->
-
-
-
-
                                 <div class="col-sm-7">
 
                                     <!--Mot accueil-->
@@ -126,8 +104,7 @@ $totalMedias = count($media);
                                     <div class="panel panel-default">
                                         <h2>Publications</h2>
 
-                                        <form method="POST" action="updatePost.php?id=<?php echo $idPost; ?>">
-
+                                        <form method="POST" action="index.php?id=<?php echo $idPost; ?>">
 
                                             <table>
 
@@ -167,7 +144,7 @@ $totalMedias = count($media);
                                                                     echo '<div class="input-group">
 																<div class="input-group-btn">'
                                                                         . '<img src="' . $uploadDir . $media[$j]["nomMedia"] . '" width="350">'  .
-                                                                        '</div>     
+                                                                        '</div>
                                                                     <a href="deletePost.php?id=' . $media[$j]["idMedia"] . '&idPost=' . $posts[$i]["idPost"] . '" class="btn btn-primary btn-sm"> Delete </a>
                                                                 
                                                                 </td>';
@@ -202,28 +179,6 @@ $totalMedias = count($media);
                                 </div>
                             </div>
                             <!--/row-->
-
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <a href="#">Twitter</a> <small class="text-muted">|</small> <a href="#">Facebook</a>
-                                    <small class="text-muted">|</small> <a href="#">Google+</a>
-                                </div>
-                            </div>
-
-                            <div class="row" id="footer">
-                                <div class="col-sm-6">
-
-                                </div>
-                            </div>
-
-                            <hr>
-
-                            <h4 class="text-center">
-                                <a href="http://usebootstrap.com/theme/facebook" target="ext">Source template</a>
-                            </h4>
-
-                            <hr>
-
 
                         </div><!-- /col-9 -->
                     </div><!-- /padding -->

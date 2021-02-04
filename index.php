@@ -1,7 +1,9 @@
 <?php
 /*
 Auteur : Yvelin A. Ray
-
+Date : 04.02.2021
+Version 1.0.5
+	
 */
 
 //require_once 'function.php';
