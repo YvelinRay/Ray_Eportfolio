@@ -158,7 +158,7 @@ $totalMedias = count($media);
 																<div class="input-group-btn">'
                                                                         . '<video src="' . $uploadDir . $media[$j]["nomMedia"] . '" controls loop autoplay width="350"></video>'  .
                                                                         '</div>
-                                                                    <a href="deleteMedia.php?id=' . $media[$j]["idMedia"] . '&idPost=' . $posts[$i]["idPost"] . '" class="btn btn-primary btn-sm"> Delete </a>
+                                                                    <a href="deletePost.php?id=' . $media[$j]["idMedia"] . '&idPost=' . $posts[$i]["idPost"] . '" class="btn btn-primary btn-sm"> Delete </a>
                                                                 
                                                                 
                                                                 </td>';
@@ -167,8 +167,8 @@ $totalMedias = count($media);
                                                                     echo '<div class="input-group">
 																<div class="input-group-btn">'
                                                                         . '<img src="' . $uploadDir . $media[$j]["nomMedia"] . '" width="350">'  .
-                                                                        '</div>
-                                                                    <a href="deleteMedia.php?id=' . $media[$j]["idMedia"] . '&idPost=' . $posts[$i]["idPost"] . '" class="btn btn-primary btn-sm"> Delete </a>
+                                                                        '</div>     
+                                                                    <a href="deletePost.php?id=' . $media[$j]["idMedia"] . '&idPost=' . $posts[$i]["idPost"] . '" class="btn btn-primary btn-sm"> Delete </a>
                                                                 
                                                                 </td>';
                                                                 }
@@ -177,7 +177,7 @@ $totalMedias = count($media);
 																<div class="input-group-btn">'
                                                                         . '<audio src="' . $uploadDir . $media[$j]["nomMedia"] . '" controls width="350"></video>'  .
                                                                         '</div>
-                                                                <a href="deleteMedia.php?id=' . $media[$j]["idMedia"] . '&idPost=' . $posts[$i]["idPost"] . ' " class="btn btn-primary btn-sm"> Delete </a>
+                                                                <a href="deletePost.php?id=' . $media[$j]["idMedia"] . '&idPost=' . $posts[$i]["idPost"] . ' " class="btn btn-primary btn-sm"> Delete </a>
                                                                 
                                                                 </td>';
                                                                 }
