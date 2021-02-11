@@ -28,13 +28,8 @@ session_start();
         
         <div class="wrapper">
 			<div class="box"> 
-	
-					  
-					</div>
-					<!-- /sidebar -->
-				  
 					<!-- main right col -->
-					<div class="column col-sm-12 col-xs-12" id="main">
+					<div class="column col-sm-12" id="main">
 						
 						<!-- top nav -->
 						<div class="navbar navbar-blue navbar-static-top">  
@@ -64,16 +59,10 @@ session_start();
                               <a href="post.php"><i class="glyphicon glyphicon-plus"></i> Post</a>
 							  </li>
 							</ul>
-							<ul class="nav navbar-nav navbar-right">
-							  <li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
-								<ul class="dropdown-menu">
-								  <li><a href="">profil</a></li>
-								</ul>
-							  </li>
-							</ul>
+							
 							</nav>
 						</div>
+						
 						<!-- /top nav -->
 					  
 						<div class="padding">
@@ -93,7 +82,24 @@ session_start();
 									  </div>
 									
 								  </div>
-							   
+								</table>
+								</div>
+							</div>
+						</div>
+						<div class="padding">
+							
+								  </div>
+								</table>
+								</div>
+							</div>
+						</div>
+						<div>
+						<div class="full col-sm-9">
+							  
+								<!-- content -->                      
+								<div class="row">
+								  
+								 <!-- main col left --> 
 								  <div class="col-sm-5">	
 									<?php
 									$posts = getAllPosts();
@@ -154,10 +160,9 @@ session_start();
 								</div>';
 									}
 
-									?>
-								</table>
-							</div>
-</div>
+									?></div>
+
+						
 </div>
         <script type="text/javascript" src="assets/js/jquery.js"></script>
         <script type="text/javascript" src="assets/js/bootstrap.js"></script>
