@@ -1,5 +1,6 @@
 <?php
 	include 'function.php';
+	const FILESIZE_MAX = 3145728;
 	$error = "";
 	$commentaire = "";
 	$btnSubmit = filter_input(INPUT_POST, "valider", FILTER_SANITIZE_STRING);
@@ -20,12 +21,14 @@
 	
 		//Vérifie qu'il y ait au moins un fichier à importer
 		if ($total  > 0 || $commentaire != "") {
+
 			$idPost = addPost($commentaire);
 			for ($i = 0; $i < $total; $i++) {
 	
 				$imgName = $_FILES['img']['name'][$i];
 				//Vérifie si le fichier dépasse les 3M
-				if ($_FILES['img']['size'][$i] <= 9145728) {
+				if ($_FILES['img']['size'][$i] <= FILESIZE_MAX) {
+
 					$imgName =  time() . "_" . $_FILES['img']['name'][$i];
 	
 					$imgTmpName = $_FILES['img']['tmp_name'][$i];
@@ -36,6 +39,7 @@
 					$stringImgType = substr($imgType, 0, strpos($imgType, "/") );
 					if($stringImgType == "image" || $stringImgType == "video" || $stringImgType == "audio"){
 						//Vérifie l'importation
+						$error = $imgTmpName;
 						if (move_uploaded_file($imgTmpName, $uploadDir . $imgName)) {
 						$error = "salit";
 							
