@@ -69,10 +69,10 @@ function deletePost($idPost){
         deleteMedia($idPost);
         $db = connectDB();
         $db->beginTransaction();
-        $sql = "DELETE FROM post WHERE post(:idPost)";
+        $sql = "DELETE FROM post WHERE idPost = $idPost";
 
         $request = $db->prepare($sql);
-        $request->execute(array('idPost' => $idPost));
+        $request->execute();
         $db->commit();
     } catch (Exception $e) {
         $db->rollBack();
@@ -82,11 +82,11 @@ function deletePost($idPost){
 function DeleteMedia($idPost){
     try {
     $db = connectDB();
-    $db->beginTransaction();
-    $sql = "DELETE FROM media WHERE idPost(:idPost)";
+    $db->beginTransaction(); 
+    $sql = "DELETE FROM media WHERE idPost = $idPost";
 
     $request = $db->prepare($sql);
-    $request->execute(array('idPost' => $idPost));
+    $request->execute();
     $db->commit();
 } catch (Exception $e) {
     $db->rollBack();
