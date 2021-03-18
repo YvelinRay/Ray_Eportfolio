@@ -106,7 +106,53 @@ session_start();
 									$media = getAllMedias();
 									$total = count($posts);
 									$totalMedias = count($media);
+										echo '<tr><td><div class="panel-body">
+									<div class="clearfix"></div>';
+										echo '<div class="panel-body">
+									<div class="clearfix"></div>
+									<hr>
 
+									<p><b>';
+										echo $posts[$i]["commentaire"];
+										echo "</td><td><a href='deletePost.php?id=" . $posts[$i]["idPost"] . "'> <button class='btn btn-primary btn-sm'>Delete</button></a> 
+										<a href='updatePost.php?id=" . $posts[$i]["idPost"] . "'> <button class='btn btn-primary btn-sm'>Update</button></a>";
+										echo '</b></p></td></tr>';
+										echo '<div class="panel-thumbnail">';
+										for ($j = 0; $j < $totalMedias; $j++) {
+											if ($posts[$i]["idPost"] == $media[$j]["idPost"]) {
+												
+											
+												$typeFinal = explode("/", $media[$j]["typeMedia"]);
+
+												echo "<tr><td>";
+												
+												if ($typeFinal[0] == "video") {
+													echo '<div class="input-group">
+														<div class="input-group-btn">'
+														. '<video src="' . $media[$j]["nomMedia"] . '" controls loop autoplay width="350"></video>'  .
+														'</div></td>';
+												}
+												if ($typeFinal[0] == "image") {
+													echo '<div class="input-group">
+														<div class="input-group-btn">'
+														. '<img src="'. $media[$j]["nomMedia"] . '" width="350">'  .
+														'</div></td>';
+												}
+												if ($typeFinal[0] == "audio") {
+													echo '<div class="input-group">
+														<div class="input-group-btn">'
+														. '<audio src="'. $media[$j]["nomMedia"] . '" controls width="350"></audio>'  .
+														'</div></td>';
+												}
+
+												echo "</tr>";
+											}
+											echo '</div>';
+										}
+
+										echo '</div>
+
+								</div>';
 
 									for ($i = 0; $i < $total; $i++) {
 

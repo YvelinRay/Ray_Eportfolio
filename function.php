@@ -66,6 +66,7 @@ function addMedia($imgName, $imgType, $idPost){
 
 function deletePost($idPost){
     try {
+        deleteMedia($idPost);
         $db = connectDB();
         $db->beginTransaction();
         $sql = "DELETE FROM post WHERE post(:idPost)";
@@ -78,4 +79,16 @@ function deletePost($idPost){
     }
     
 }
-?>
+function DeleteMedia($idPost){
+    try {
+    $db = connectDB();
+    $db->beginTransaction();
+    $sql = "DELETE FROM media WHERE idPost(:idPost)";
+
+    $request = $db->prepare($sql);
+    $request->execute(array('idPost' => $idPost));
+    $db->commit();
+} catch (Exception $e) {
+    $db->rollBack();
+}
+}
