@@ -1,6 +1,5 @@
 <?php
 	include 'function.php';
-	const FILESIZE_MAX = 3145728;
 	$error = "";
 	$commentaire = "";
 	$btnSubmit = filter_input(INPUT_POST, "valider", FILTER_SANITIZE_STRING);
@@ -24,10 +23,10 @@
 
 			$idPost = addPost($commentaire);
 			for ($i = 0; $i < $total; $i++) {
-	
+				$allfilessize += $_FILES['img']['size'][$i];
 				$imgName = $_FILES['img']['name'][$i];
 				//Vérifie si le fichier dépasse les 3M
-				if ($_FILES['img']['size'][$i] <= FILESIZE_MAX) {
+				if ($_FILES['img']['size'][$i] <= FILESIZE_MAX && $allfilessize <= ALL_FILESIZE_MAX) {
 
 					$imgName =  time() . "_" . $_FILES['img']['name'][$i];
 	
@@ -52,7 +51,7 @@
 						$error .= $imgType . " n'est pas du bon type. ";
 					}
 				} else {
-					$error .=  $imgName . " est trop grand	. (3Mo) \r\n";
+					$error .=  $imgName . " est trop grand \r\n";
 				}
 			}
 		}

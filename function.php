@@ -1,6 +1,6 @@
 <?php
 include 'database.php';
-
+include 'const.php';
 function addPost($commentaire)
 {
     try {
@@ -86,8 +86,11 @@ function DeleteMedia($idPost){
     $sql = "DELETE FROM media WHERE idPost = $idPost";
 
     $request = $db->prepare($sql);
-    $request->execute();
-    $db->commit();
+    if($request->execute()){
+        if(unlink( UPLOAD_PATH .$imgName)){
+            $db->commit();
+        }
+    }
 } catch (Exception $e) {
     $db->rollBack();
 }
