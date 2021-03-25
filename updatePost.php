@@ -6,7 +6,8 @@ $btnSubmit = filter_input(INPUT_POST, "validation", FILTER_SANITIZE_STRING);
 $commentaire = filter_input(INPUT_POST, "commentaire", FILTER_SANITIZE_STRING);
 
 if ($btnSubmit) {
-    header("Location: updateComment.php?id=" . $idPost . "&comment=" . $commentaire);
+    UpdateComment($commentaire, $idPost);
+    header("Location: index.php?id=" . $idPost . "&comment=" . $commentaire);
     exit();
 }
 
@@ -95,7 +96,7 @@ $totalMedias = count($media);
                                     <div class="panel panel-default">
                                         <h2>Publications</h2>
 
-                                        <form method="POST" action="index.php?id=<?php echo $idPost; ?>">
+                                        <form method="POST" action="./updatePost.php?id=<?php echo $idPost; ?>">
 
                                             <table>
 

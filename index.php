@@ -7,6 +7,8 @@ Auteur : Yvelin A. Ray
 //require_once 'function.php';
 include "function.php";	
 session_start();
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -146,6 +148,7 @@ session_start();
 											}
 											echo '</div>';
 										}
+										
 
 										echo '</div>
 

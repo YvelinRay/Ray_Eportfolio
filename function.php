@@ -87,10 +87,45 @@ function DeleteMedia($idPost){
 
     $request = $db->prepare($sql);
     if($request->execute()){
-        if(unlink( UPLOAD_PATH .$imgName)){
+        //if(unlink( UPLOAD_PATH .$imgName)){
             $db->commit();
-        }
+        //}
     }
+} catch (Exception $e) {
+    $db->rollBack();
+}
+}
+
+function convertImage($source, $dst, $width, $height, $quality, $type){
+
+	$imageSize = getimagesize($source);
+
+	if($type == 'png'){
+
+		$imageRessource = imagecreatefrompng($source);
+	}else{
+		$imageRessource = imagecreatefromjpeg($source);
+	}
+
+	$imageFinal = imagecreatetruecolor($width,$height);
+
+	$final = imagecopyresampled($imageFinal, $imageRessource, 0, 0, 0, 0, $width, $height, $imageSize[0], $imageSize[1]);
+
+	imagejpeg($imageFinal, $dst, $quality);
+}
+
+function UpdateComment(string $comment, int $idPost)
+{
+  $date = date("Y-m-d H:i:s");
+
+  try {
+    $db = connectDB();
+    $db->beginTransaction(); 
+    $sql = "UPDATE post SET commentaire = :commentaires, modificationDate = :dateModifiee WHERE idPost = :idPosts";
+
+    $request = $db->prepare($sql);
+    $request->execute(array('commentaires' => $comment, 'dateModifiee' => $date, 'idPosts' => $idPost));
+    $db->commit();
 } catch (Exception $e) {
     $db->rollBack();
 }
