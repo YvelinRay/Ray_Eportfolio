@@ -66,7 +66,7 @@ function addMedia($imgName, $imgType, $idPost){
 
 function deletePost($idPost){
     try {
-        deleteMedia($idPost);
+        DeleteMedia($idPost);
         $db = connectDB();
         $db->beginTransaction();
         $sql = "DELETE FROM post WHERE idPost = $idPost";
@@ -87,9 +87,9 @@ function DeleteMedia($idPost){
 
     $request = $db->prepare($sql);
     if($request->execute()){
-        //if(unlink( UPLOAD_PATH .$imgName)){
+        if(unlink( UPLOAD_PATH .$imgName)){
             $db->commit();
-        //}
+        }
     }
 } catch (Exception $e) {
     $db->rollBack();
