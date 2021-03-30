@@ -6,16 +6,13 @@ function addPost($commentaire)
     try {
         $id = -1;
         $db = connectDB();
-        $db->beginTransaction();
         $sql = "INSERT INTO post(commentaire) VALUES(:commentaire);";
 
         $request = $db->prepare($sql);
         $request->execute(array('commentaire' => $commentaire));
         $id = $db->lastInsertId();
-        $db->commit();
         return $id;
     } catch (Exception $e) {
-        $db->rollBack();
     }
 }
 
@@ -53,46 +50,34 @@ function connectDB()
 function addMedia($imgName, $imgType, $idPost){
     try {
         $db = connectDB();
-        $db->beginTransaction();
         $sql = "INSERT INTO media(typeMedia, nomMedia, idPost) VALUES(:imgType, :imgName, :idPost);";
 
         $request = $db->prepare($sql);
         $request->execute(array('imgName' => $imgName, 'imgType' => $imgType, 'idPost' => $idPost));
-        $db->commit();
     } catch (Exception $e) {
-        $db->rollBack();
     }
 }
 
 function deletePost($idPost){
     try {
-        DeleteMedia($idPost);
         $db = connectDB();
-        $db->beginTransaction();
         $sql = "DELETE FROM post WHERE idPost = $idPost";
 
         $request = $db->prepare($sql);
         $request->execute();
-        $db->commit();
+        
     } catch (Exception $e) {
-        $db->rollBack();
     }
     
 }
-function DeleteMedia($idPost){
+function deleteMedia($idPost){
     try {
     $db = connectDB();
-    $db->beginTransaction(); 
     $sql = "DELETE FROM media WHERE idPost = $idPost";
 
     $request = $db->prepare($sql);
-    if($request->execute()){
-        if(unlink( UPLOAD_PATH .$imgName)){
-            $db->commit();
-        }
-    }
+    $request->execute();
 } catch (Exception $e) {
-    $db->rollBack();
 }
 }
 
@@ -120,13 +105,10 @@ function UpdateComment(string $comment, int $idPost)
 
   try {
     $db = connectDB();
-    $db->beginTransaction(); 
     $sql = "UPDATE post SET commentaire = :commentaires, modificationDate = :dateModifiee WHERE idPost = :idPosts";
 
     $request = $db->prepare($sql);
     $request->execute(array('commentaires' => $comment, 'dateModifiee' => $date, 'idPosts' => $idPost));
-    $db->commit();
 } catch (Exception $e) {
-    $db->rollBack();
 }
 }

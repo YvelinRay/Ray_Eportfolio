@@ -16,7 +16,7 @@
 		}
 	
 		$db = connectDB();
-	
+		$db->startTransaction();
 	
 		//Vérifie qu'il y ait au moins un fichier à importer
 		if ($total  > 0 || $commentaire != "") {
@@ -40,17 +40,18 @@
 						//Vérifie l'importation
 						$error = $imgTmpName;
 						if (move_uploaded_file($imgTmpName, $uploadDir . $imgName)) {
-						$error = "salit";
-							
 							addMedia($uploadDir.$imgName, $imgType, $idPost);
 							header("Location: index.php");
+							$db->commit();
 							exit();
 						}
 					}	
 					else{
+						$db->rollBack();
 						$error .= $imgType . " n'est pas du bon type. ";
 					}
 				} else {
+					$db->rollBack();
 					$error .=  $imgName . " est trop grand \r\n";
 				}
 			}

@@ -25,4 +25,26 @@ class EDatabase {
 		$objInstance = self::getInstance();
 		return 	call_user_func_array(array($objInstance, $chrMethod), $arrArguments);
 	} 
+
+	public function startTransaction()
+    {
+        DBConnection::getConnection()->beginTransaction();
+    }
+
+    public function rollback()
+    {
+        try {
+            DBConnection::getConnection()->rollback();
+        } catch (\Throwable $th) {
+        }
+    }
+
+    public function commit()
+    {
+        try {
+            DBConnection::getConnection()->commit();
+        } catch (\Throwable $th) {
+        }
+        
+    }
 }
