@@ -3,14 +3,13 @@
     $idPost = $_GET['id'];
     deletePost($idPost);
     deleteMedia($idPost);		
-    
-    $db = connectDB();
-    $db->startTransaction();;
+
+    EDatabase::startTransaction();
         try {
             unlink(UPLOAD_PATH .$imgName);
-            $db->commit();
+            EDatabase::commit();
         } catch (Exception $e) {
-            $db->rollback();
+            EDatabase::rollback();
             echo "Rollback";
         }
     header("Location: index.php");

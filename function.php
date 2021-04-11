@@ -4,55 +4,38 @@ include 'const.php';
 function addPost($commentaire)
 {
     try {
-        $id = -1;
-        $db = connectDB();
+        $latsInsertId = -1;
         $sql = "INSERT INTO post(commentaire) VALUES(:commentaire);";
-
-        $request = $db->prepare($sql);
+        $request = EDatabase::prepare($sql);
         $request->execute(array('commentaire' => $commentaire));
-        $id = $db->lastInsertId();
-        return $id;
-    } catch (Exception $e) {
+        $latsInsertId = Edatabase::getInstance()->lastInsertId();
+        return $latsInsertId;
+    } catch (Exception $e) {        
     }
 }
 
 function getAllPosts()
 {
-
-    $db = connectDB();
     $sql = "SELECT * FROM post ORDER BY idPost DESC";
-    $request = $db->prepare($sql);
+    $request = EDatabase::prepare($sql);
     $request->execute();
     return $request->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getAllMedias()
 {
-    $db = connectDB();
-
     $sql = "SELECT * FROM media ORDER BY idPost DESC ";
-    $request = $db->prepare($sql);
+    $request = EDatabase::prepare($sql);
     $request->execute();
     return $request->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function connectDB()
-{
-    static $bdd = null;
-
-    if ($bdd === null) {
-        $bdd = new PDO("mysql:host=" .DB_HOST. ";dbname=" . DB_NAME .";charset=utf8", DB_USER, DB_PASSWORD);
-        $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    }
-    return $bdd;
-}
 
 function addMedia($imgName, $imgType, $idPost){
     try {
-        $db = connectDB();
         $sql = "INSERT INTO media(typeMedia, nomMedia, idPost) VALUES(:imgType, :imgName, :idPost);";
 
-        $request = $db->prepare($sql);
+        $request = EDatabase::prepare($sql);
         $request->execute(array('imgName' => $imgName, 'imgType' => $imgType, 'idPost' => $idPost));
     } catch (Exception $e) {
     }
@@ -60,10 +43,9 @@ function addMedia($imgName, $imgType, $idPost){
 
 function deletePost($idPost){
     try {
-        $db = connectDB();
         $sql = "DELETE FROM post WHERE idPost = $idPost";
 
-        $request = $db->prepare($sql);
+        $request = EDatabase::prepare($sql);
         $request->execute();
         
     } catch (Exception $e) {
@@ -72,10 +54,9 @@ function deletePost($idPost){
 }
 function deleteMedia($idPost){
     try {
-    $db = connectDB();
     $sql = "DELETE FROM media WHERE idPost = $idPost";
 
-    $request = $db->prepare($sql);
+    $request = EDatabase::prepare($sql);
     $request->execute();
 } catch (Exception $e) {
 }
@@ -104,10 +85,9 @@ function UpdateComment(string $comment, int $idPost)
   $date = date("Y-m-d H:i:s");
 
   try {
-    $db = connectDB();
     $sql = "UPDATE post SET commentaire = :commentaires, modificationDate = :dateModifiee WHERE idPost = :idPosts";
 
-    $request = $db->prepare($sql);
+    $request = EDatabase::prepare($sql);
     $request->execute(array('commentaires' => $comment, 'dateModifiee' => $date, 'idPosts' => $idPost));
 } catch (Exception $e) {
 }

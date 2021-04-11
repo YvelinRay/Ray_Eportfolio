@@ -15,9 +15,8 @@
 			$error = "";
 		}
 	
-		$db = connectDB();
-		$db->startTransaction();
-	
+		EDatabase::beginTransaction();
+
 		//Vérifie qu'il y ait au moins un fichier à importer
 		if ($total  > 0 || $commentaire != "") {
 
@@ -41,17 +40,20 @@
 						$error = $imgTmpName;
 						if (move_uploaded_file($imgTmpName, $uploadDir . $imgName)) {
 							addMedia($uploadDir.$imgName, $imgType, $idPost);
+							EDatabase::commit();
 							header("Location: index.php");
-							$db->commit();
 							exit();
+						}
+						else{
+							$error .= $imgType . " n'est pas bon. ";
 						}
 					}	
 					else{
-						$db->rollBack();
+						EDatabase::rollBack();
 						$error .= $imgType . " n'est pas du bon type. ";
 					}
 				} else {
-					$db->rollBack();
+					EDatabase::rollBack();
 					$error .=  $imgName . " est trop grand \r\n";
 				}
 			}
