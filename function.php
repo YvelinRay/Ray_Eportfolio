@@ -29,7 +29,13 @@ function getAllMedias()
     $request->execute();
     return $request->fetchAll(PDO::FETCH_ASSOC);
 }
-
+function getAllMediasOfPost($idPost)
+{
+    $sql = "SELECT nomMedia FROM media WHERE idPost = $idPost";
+    $request = EDatabase::prepare($sql);
+    $request->execute();
+    return $request->fetchAll(PDO::FETCH_ASSOC);
+}
 
 function addMedia($imgName, $imgType, $idPost){
     try {
@@ -66,19 +72,39 @@ catch(Exception $e){
 }
 }
 
-function deleteMedia($idPost, $idMedia){
-    $mediaName = getMediaName($idMedia);
+function deleteMedia($idPost, $idMedia = null){
+    $mediaName = null;
+    if($idMedia != null){
+        $mediaName = getMediaName($idMedia);
+        $sql = "DELETE FROM media WHERE idPost = $idPost AND idMedia = $idMedia";
+    }
+    else{
+        $sql = "DELETE FROM media WHERE idPost = $idPost";
+    }
     try {
-    $sql = "DELETE FROM media WHERE idPost = $idPost AND idMedia = $idMedia";
 
     $request = EDatabase::prepare($sql);
     if($request->execute()){
     
-    if(unlink($mediaName)){
-        return true;
+    if(count($mediaName) > 1){
+       for($i = 0; $i< count($mediaName); $i++)
+       {
+           if(unlink($mediaName[$i]));
+           {
+                return true;
+           }
+           else{
+               return false;
+           }
+       }
     }
     else{
-        return false
+        if(unlink($mediaName)){
+            return true;
+        }
+        else{
+            return false;
+        }
     }}
     else{
         return false;
