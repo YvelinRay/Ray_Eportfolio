@@ -7,6 +7,24 @@ $commentaire = filter_input(INPUT_POST, "commentaire", FILTER_SANITIZE_STRING);
 
 if ($btnSubmit) {
     UpdateComment($commentaire, $idPost);
+    EDatabase::beginTransaction();
+
+		//Vérifie qu'il y ait au moins un fichier à importer
+		if(InfoImg($_FILES, $idPost)){
+			EDatabase::commit();
+		}
+		else{
+			EDatabase::rollback();
+		}
+        for($i=0; $i < count($_POST["remove"])-1; $i++){
+            EDatabase::beginTransaction();
+            if(deleteMedia($idPost, $idMedia)){
+                EDatabase::commit();
+            }
+            else{
+                EDatabase::rollback();
+            }
+        }
     header("Location: index.php?id=" . $idPost . "&comment=" . $commentaire);
     exit();
 }
@@ -112,9 +130,10 @@ $totalMedias = count($media);
 											    <div class="clearfix"></div>
 											    <hr>
 											    <p><b>';
-                                                        echo "<input type='text' name='commentaire' value='" . $posts[$i]["commentaire"] . "'>";
+                                                        echo "<input type='text' name='commentaire' value='" . $posts[$i]["commentaire"] . "'>Choisissez une image !<input type=\"file\" name=\"img[]\" multiple accept=\"image/,video/, audio/*\" />";
 
-                                                        echo '<input type="submit" class="btn btn-primary btn-sm" name="validation" value="Update Comment" />';
+                                                        echo '<input type="submit" class="btn btn-primary btn-sm" name="validation" value="Update" />';
+
                                                         for ($j = 0; $j < $totalMedias; $j++) {
                                                             if ($posts[$i]["idPost"] == $media[$j]["idPost"]) {
 
@@ -125,9 +144,9 @@ $totalMedias = count($media);
                                                                 if ($typeFinal[0] == "video") {
                                                                     echo '<div class="input-group">
 																<div class="input-group-btn">'
-                                                                        . '<video src="' . $uploadDir . $media[$j]["nomMedia"] . '" controls loop autoplay width="350"></video>'  .
+                                                                        . '<video src="' . $media[$j]["nomMedia"] . '" controls loop autoplay width="350"></video>'  .
                                                                         '</div>
-                                                                    <a href="deletePost.php?id=' . $media[$j]["idMedia"] . '&idPost=' . $posts[$i]["idPost"] . '" class="btn btn-primary btn-sm"> Delete </a>
+                                                                        <span><input type="checkbox" name="remove[]" id="remove[]" value="'. $media[$j]["idMedia"] . '">Le supprimer ?</span>
                                                                 
                                                                 
                                                                 </td>';
@@ -135,18 +154,19 @@ $totalMedias = count($media);
                                                                 if ($typeFinal[0] == "image") {
                                                                     echo '<div class="input-group">
 																<div class="input-group-btn">'
-                                                                        . '<img src="' . $uploadDir . $media[$j]["nomMedia"] . '" width="350">'  .
+                                                                        . '<img src="' . $media[$j]["nomMedia"] . '" width="350">'  .
                                                                         '</div>
-                                                                    <a href="deletePost.php?id=' . $media[$j]["idMedia"] . '&idPost=' . $posts[$i]["idPost"] . '" class="btn btn-primary btn-sm"> Delete </a>
+                                                                        <span><input type="checkbox" name="remove[]" id="remove[]" value="'. $media[$j]["idMedia"] . '">Le supprimer ?</span>
+                                                                        
                                                                 
                                                                 </td>';
                                                                 }
                                                                 if ($typeFinal[0] == "audio") {
                                                                     echo '<div class="input-group">
 																<div class="input-group-btn">'
-                                                                        . '<audio src="' . $uploadDir . $media[$j]["nomMedia"] . '" controls width="350"></video>'  .
+                                                                        . '<audio src="'  . $media[$j]["nomMedia"] . '" controls width="350"></video>'  .
                                                                         '</div>
-                                                                <a href="deletePost.php?id=' . $media[$j]["idMedia"] . '&idPost=' . $posts[$i]["idPost"] . ' " class="btn btn-primary btn-sm"> Delete </a>
+                                                                        <span><input type="checkbox" name="remove[]" id="remove[]" value="'. $media[$j]["idMedia"] . '">Le supprimer ?</span>
                                                                 
                                                                 </td>';
                                                                 }

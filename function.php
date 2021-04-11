@@ -8,7 +8,7 @@ function addPost($commentaire)
         $sql = "INSERT INTO post(commentaire) VALUES(:commentaire);";
         $request = EDatabase::prepare($sql);
         $request->execute(array('commentaire' => $commentaire));
-        $latsInsertId = Edatabase::getInstance()->lastInsertId();
+        $latsInsertId = EDatabase::getInstance()->lastInsertId();
         return $latsInsertId;
     } catch (Exception $e) {        
     }
@@ -52,12 +52,38 @@ function deletePost($idPost){
     }
     
 }
-function deleteMedia($idPost){
-    try {
-    $sql = "DELETE FROM media WHERE idPost = $idPost";
 
+function getMediaName($idMedia){
+try{
+    $sql = "SELECT nomMedia FROM media WHERE idMedia = $idMedia";
     $request = EDatabase::prepare($sql);
     $request->execute();
+    return $request->fetch(PDO::FETCH_ASSOC);
+
+}
+catch(Exception $e){
+    return false;
+}
+}
+
+function deleteMedia($idPost, $idMedia){
+    $mediaName = getMediaName($idMedia);
+    try {
+    $sql = "DELETE FROM media WHERE idPost = $idPost AND idMedia = $idMedia";
+
+    $request = EDatabase::prepare($sql);
+    if($request->execute()){
+    
+    if(unlink($mediaName)){
+        return true;
+    }
+    else{
+        return false
+    }}
+    else{
+        return false;
+    }
+
 } catch (Exception $e) {
 }
 }
@@ -78,6 +104,60 @@ function convertImage($source, $dst, $width, $height, $quality, $type){
 	$final = imagecopyresampled($imageFinal, $imageRessource, 0, 0, 0, 0, $width, $height, $imageSize[0], $imageSize[1]);
 
 	imagejpeg($imageFinal, $dst, $quality);
+}
+
+
+function InfoImg($files){
+    try{
+        if ($total  > 0 || $commentaire != "") {
+
+			$idPost = addPost($commentaire);
+            $allfilessize = 0;
+			for ($i = 0; $i < $total; $i++) {
+                $allfilessize += $files['img']['size'][$i];
+				$imgName = $files['img']['name'][$i];
+				//Vérifie si le fichier dépasse les 3M
+				if ($files['img']['size'][$i] <= FILESIZE_MAX && $allfilessize <= ALL_FILESIZE_MAX) {
+
+					$imgName =  time() . "_" . $files['img']['name'][$i];
+	
+					$imgTmpName = $files['img']['tmp_name'][$i];
+					$imgType = $files['img']['type'][$i];
+							
+					
+					//$error .= $imgType;
+					$stringImgType = substr($imgType, 0, strpos($imgType, "/") );
+					if($stringImgType == "image" || $stringImgType == "video" || $stringImgType == "audio"){
+						//Vérifie l'importation
+						$error = $imgTmpName;
+						if (move_uploaded_file($imgTmpName, $uploadDir . $imgName)) {
+							addMedia($uploadDir.$imgName, $imgType, $idPost);
+					//		EDatabase::commit();
+                            return true;
+
+						}
+						else{
+							//$error .= $imgType . " n'est pas bon. ";
+                            return false;
+                        }
+					}	
+					else{
+						//EDatabase::rollBack();
+						//$error .= $imgType . " n'est pas du bon type. ";
+                        return false;
+					
+                    }
+				} else {
+					//EDatabase::rollBack();
+					//$error .=  $imgName . " est trop grand \r\n";
+                    return false;
+				}
+			}
+		}
+    }
+    catch(Exception $e){
+
+    }
 }
 
 function UpdateComment(string $comment, int $idPost)

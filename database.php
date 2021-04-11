@@ -11,8 +11,8 @@ class EDatabase {
 	public static function getInstance() {
 		if(!self::$objInstance){
 			try{
-				$dsn = EDB_DBTYPE.':host='.DB_HOST.';port='.EDB_PORT.';dbname='.EDB_DBNAME;
-			   	self::$objInstance = new PDO($dsn, DB_USER, EDB_PASS, array('charset'=>'utf8'));
+				$dsn = DB_DBTYPE.':host='.DB_HOST.';port='.DB_PORT.';dbname='.DB_DBNAME;
+			   	self::$objInstance = new PDO($dsn, DB_USER, DB_PASS, array('charset'=>'utf8'));
 				self::$objInstance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			}catch(PDOException $e ){
 				echo "EDatabase Error: ".$e;

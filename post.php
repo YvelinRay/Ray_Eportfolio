@@ -18,45 +18,12 @@
 		EDatabase::beginTransaction();
 
 		//Vérifie qu'il y ait au moins un fichier à importer
-		if ($total  > 0 || $commentaire != "") {
-
-			$idPost = addPost($commentaire);
-			for ($i = 0; $i < $total; $i++) {
-				$allfilessize += $_FILES['img']['size'][$i];
-				$imgName = $_FILES['img']['name'][$i];
-				//Vérifie si le fichier dépasse les 3M
-				if ($_FILES['img']['size'][$i] <= FILESIZE_MAX && $allfilessize <= ALL_FILESIZE_MAX) {
-
-					$imgName =  time() . "_" . $_FILES['img']['name'][$i];
-	
-					$imgTmpName = $_FILES['img']['tmp_name'][$i];
-					$imgType = $_FILES['img']['type'][$i];
-							
-					
-					//$error .= $imgType;
-					$stringImgType = substr($imgType, 0, strpos($imgType, "/") );
-					if($stringImgType == "image" || $stringImgType == "video" || $stringImgType == "audio"){
-						//Vérifie l'importation
-						$error = $imgTmpName;
-						if (move_uploaded_file($imgTmpName, $uploadDir . $imgName)) {
-							addMedia($uploadDir.$imgName, $imgType, $idPost);
-							EDatabase::commit();
-							header("Location: index.php");
-							exit();
-						}
-						else{
-							$error .= $imgType . " n'est pas bon. ";
-						}
-					}	
-					else{
-						EDatabase::rollBack();
-						$error .= $imgType . " n'est pas du bon type. ";
-					}
-				} else {
-					EDatabase::rollBack();
-					$error .=  $imgName . " est trop grand \r\n";
-				}
-			}
+		if(InfoImg($_FILES, $idPost)){
+			EDatabase::commit();
+			header("Location:index.php");
+		}
+		else{
+			EDatabase::rollback();
 		}
 	}
 ?>
