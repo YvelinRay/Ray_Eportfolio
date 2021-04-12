@@ -93,9 +93,6 @@ function deleteMedia($idPost, $idMedia = null){
            {
                 return true;
            }
-           else{
-               return false;
-           }
        }
     }
     else{
